@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:zelio_social/chat/model/add_message_model.dart';
+import 'package:zelio_social/chat/model/message_model.dart';
 import 'package:zelio_social/services/dio_exceptions.dart';
 import 'package:zelio_social/services/dio_instance.dart';
 
@@ -21,14 +21,18 @@ class MessageService {
     }
   }
 
-  Future<MessageModel> addMessage(
-      {String? chatId, String? content, List<File>? images}) async {
+  Future<MessageModel> addMessage({
+    required String chatId,
+    required String content,
+    List<File>? images,
+  }) async {
     Map<String, dynamic> data = {};
-
-    final image = await Future.wait(
-        images!.map((e) => MultipartFile.fromFile(e.path)).toList());
-
-    data["images"] = image;
+    if (images != null && images.isNotEmpty) {
+      final image = await Future.wait(
+          images.map((e) => MultipartFile.fromFile(e.path)).toList());
+      data["images"] = image;
+    }
+    data["content"] = content;
 
     try {
       final response = await DioSingleton.instance.dio.post(
@@ -40,6 +44,18 @@ class MessageService {
     } on DioException catch (e) {
       print("Error while adding message : $e");
       throw DioExceptions.fromDioError(e);
+    }
+  }
+
+   Future<MessageModel> deleteMessage({String? chatId, String? messageId}) async {
+    try {
+      final response = await DioSingleton.instance.dio
+          .delete("chat-app/messages/${chatId}/${messageId}");
+      final body = response.data;
+      return MessageModel.fromJson(body["data"]);
+    } catch (e) {
+      print("Error in deleting : ${e.toString()}");
+      rethrow;
     }
   }
 }

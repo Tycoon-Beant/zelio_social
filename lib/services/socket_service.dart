@@ -13,7 +13,7 @@ class SocketService {
         OptionBuilder()
         .setTransports(['websocket'])
         .disableAutoConnect()
-        .setExtraHeaders({'cookie' : token!.accessToken})
+        .setAuth({'token' : token!.accessToken})
         .build()
       );
       _socket.on("connected",(_){

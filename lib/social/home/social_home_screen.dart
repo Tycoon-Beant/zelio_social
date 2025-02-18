@@ -229,6 +229,9 @@ class PostWidget extends StatelessWidget {
                               child: AspectRatio(
                                   aspectRatio: 4 / 5,
                                   child: Image.network(
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(child: Text('Unable to load Image'));
+                                    },
                                     postItem.images?.firstOrNull?.localPath ??
                                         '',
                                     fit: BoxFit.cover,

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_swipe_action_cell/flutter_swipe_action_cell.dart';
 import 'package:zelio_social/Widgets/async_widget.dart';
 import 'package:zelio_social/chat/cubit/chat_list_cubit.dart';
-import 'package:zelio_social/chat/cubit/create_one_to_one_chat_cubit.dart';
-import 'package:zelio_social/chat/cubit/meassge_list_cubit.dart';
+import 'package:zelio_social/chat/cubit/one_to_one_chat_cubit.dart';
 import 'package:zelio_social/chat/model/chat_model.dart';
+import 'package:zelio_social/chat/screen/create_group_chat_screen.dart';
 import 'package:zelio_social/config/common.dart';
 import 'package:zelio_social/chat/screen/chat_screen.dart';
 import 'package:zelio_social/services/local_storage_service.dart';
@@ -20,16 +20,16 @@ class ChatListScreen extends StatefulWidget {
 List msgCount = ["3", "1", "4", "2", "", "", "3", "1", "4", "2", "", ""];
 
 class _ChatListScreenState extends State<ChatListScreen> {
+  String? _selectedOption;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CreateOneToOneChatCubit(context.read()),
+          create: (context) => OneToOneChatCubit(context.read()),
         ),
         BlocProvider(
-          create: (context) => MessageListCubit(context.read()),
-        ),
+            create: (context) => ChatlistCubit(context.read(), context.read()))
       ],
       child: SafeArea(
         child: Scaffold(
@@ -41,9 +41,28 @@ class _ChatListScreenState extends State<ChatListScreen> {
             ),
             actions: [
               Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Icon(Icons.more_vert),
-              )
+                  padding: const EdgeInsets.only(right: 20),
+                  child: PopupMenuButton<String>(
+                    onSelected: (String value) {
+                      setState(() {
+                        _selectedOption = value;
+                      });
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      PopupMenuItem(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => CreateGroupChatScreen()));
+                          },
+                          value: "Option 1",
+                          child: Text(
+                            "Create Group",
+                            style: context.theme.titleMedium!.copyWith(
+                              color: Colors.black,
+                            ),
+                          )),
+                    ],
+                  ))
             ],
           ),
           body: Expanded(
@@ -75,9 +94,6 @@ class _ChatListScreenState extends State<ChatListScreen> {
                             ],
                             child: InkWell(
                               onTap: () {
-                                context
-                                    .read<MessageListCubit>()
-                                    .getMessages(chat.id!);
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => ChatScreen(
@@ -109,15 +125,14 @@ class _ChatListScreenState extends State<ChatListScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                              chat?.chatTitle(
-                                                      currentUser!.id!) ??
-                                                  "N/A",
+                                          Text(chat.chatTitle(currentUser!.id!),
                                               style: context.theme.titleMedium!
                                                   .copyWith(
                                                       fontFamily:
                                                           FontFamily.w700)),
-                                          Text("start conversation....",
+                                          Text(
+                                              chat.lastMessage?.content ??
+                                                  "start conversation....",
                                               overflow: TextOverflow.ellipsis,
                                               style: context.theme.bodySmall!
                                                   .copyWith(

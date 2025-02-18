@@ -60,7 +60,7 @@ class CoverImage {
     if (image == null) {
       return null;
     }
-    return "$imageBaseUrl${image.replaceAll("public", "")}";
+    return "$imageBaseUrl${image.replaceAll("public/", "")}";
   }
 
 

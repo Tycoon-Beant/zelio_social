@@ -90,7 +90,7 @@ class Images {
     if (image == null) {
       return null;
     }
-    return "$imageBaseUrl${image.replaceAll("public", "")}";
+    return "$imageBaseUrl${image.replaceAll("public/", "")}";
   }
 
   factory Images.fromJson(Map<String, dynamic> json) => _$ImagesFromJson(json);

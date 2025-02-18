@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-String imageBaseUrl = "http://192.168.1.6:8080/";
-String baseUrl = "http://192.168.1.6:8080/api/v1/";
+String imageBaseUrl = "http://192.168.1.20:8080/";
+String baseUrl = "${imageBaseUrl}api/v1/";
 abstract class FontFamily {
   static String get w700 => "NunitoSans_10pt_Bold";
   static String get w800 => "NunitoSans_10pt_Black";
@@ -19,6 +19,10 @@ extension ThemeGetter on BuildContext {
 enum SocketEvents{
   newChat(event : "newChat"),
   joinChat(event: "joinChat"),
+  updateGroupName(event: "updateGroupName"),
+  typing(event: "typing"),
+  stopTyping(event: "stopTyping"),
+  messageReceived(event: "messageReceived"),
   leaveChat(event : "leaveChat");
 
 

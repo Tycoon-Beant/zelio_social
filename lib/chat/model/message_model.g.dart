@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'add_message_model.dart';
+part of 'message_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -31,32 +31,4 @@ Map<String, dynamic> _$MessageModelToJson(MessageModel instance) =>
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
       'iV': instance.iV,
-    };
-
-Sender _$SenderFromJson(Map<String, dynamic> json) => Sender(
-      id: json['_id'] as String?,
-      avatar: json['avatar'] == null
-          ? null
-          : Avatar.fromJson(json['avatar'] as Map<String, dynamic>),
-      username: json['username'] as String?,
-      email: json['email'] as String?,
-    );
-
-Map<String, dynamic> _$SenderToJson(Sender instance) => <String, dynamic>{
-      '_id': instance.id,
-      'avatar': instance.avatar,
-      'username': instance.username,
-      'email': instance.email,
-    };
-
-Avatar _$AvatarFromJson(Map<String, dynamic> json) => Avatar(
-      url: json['url'] as String?,
-      localPath: Avatar._localPathFromJson(json['localPath'] as String?),
-      id: json['_id'] as String?,
-    );
-
-Map<String, dynamic> _$AvatarToJson(Avatar instance) => <String, dynamic>{
-      'url': instance.url,
-      'localPath': instance.localPath,
-      '_id': instance.id,
     };

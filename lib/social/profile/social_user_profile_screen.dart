@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:zelio_social/chat/cubit/chat_list_cubit.dart';
-import 'package:zelio_social/chat/cubit/create_one_to_one_chat_cubit.dart';
+import 'package:zelio_social/chat/cubit/one_to_one_chat_cubit.dart';
 import 'package:zelio_social/chat/model/chat_model.dart';
 import 'package:zelio_social/chat/screen/chat_screen.dart';
 import 'package:zelio_social/config/common.dart';
@@ -43,7 +43,7 @@ class _SocialUserProfileScreenState extends State<SocialUserProfileScreen> {
                   ..getProfileData(userName: widget.username),
           ),
           BlocProvider(
-              create: (context) => CreateOneToOneChatCubit(context.read()))
+              create: (context) => OneToOneChatCubit(context.read()))
         ],
         child: Builder(builder: (context) {
           return SafeArea(
@@ -78,12 +78,12 @@ class _SocialUserProfileScreenState extends State<SocialUserProfileScreen> {
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 child: Column(
                   children: [
-                    BlocListener<CreateOneToOneChatCubit, Result<ChatModel>>(
+                    BlocListener<OneToOneChatCubit, Result<OneToOneChatState>>(
                       listener: (context, state) {
                         if (state.data != null) {
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => ChatScreen(
-                                    chatModel: state.data,
+                                    chatModel: state.data?.model,
                                   )));
                         }
                       },
@@ -255,17 +255,17 @@ class _ProfilePageState extends State<ProfilePage> {
                     );
                   }
 
-                  context.read<CreateOneToOneChatCubit>().createOneOnOneChat(
+                  context.read<OneToOneChatCubit>().createOneOnOneChat(
                       receiverId: widget.profile?.myProfile?.owner);
                 }, child:
-                    BlocBuilder<CreateOneToOneChatCubit, Result<ChatModel>>(
+                    BlocBuilder<OneToOneChatCubit, Result<OneToOneChatState>>(
                   builder: (context, state) {
                     if (state.isLoading) {
                       return Center(
                         child: CircularProgressIndicator(),
                       );
                     }
-                    if (state.data != null) {
+                    if (state.error != null) {
                       return Text("error");
                     }
                     return Image.asset("assets/social_media/3x/comment.png");

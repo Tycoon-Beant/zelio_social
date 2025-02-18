@@ -54,6 +54,7 @@ dependencies:
   country_code_picker: ^3.1.0
   collection: ^1.18.0
   socket_io_client: ^3.0.2
+  emoji_picker_flutter: ^4.3.0
 
 dev_dependencies:
   flutter_test:

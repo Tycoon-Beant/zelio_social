@@ -30,4 +30,18 @@ class ChatService {
       rethrow;
     }
   }
+
+ 
+
+  Future<ChatModel> deleteOneToOneChat({String? chatId}) async {
+    try {
+      final response = await DioSingleton.instance.dio
+          .delete("chat-app/chats/remove/${chatId}");
+      final body = response.data;
+      return ChatModel.fromJson(body["data"]);    
+    } catch (e) {
+      print("Error in deleting : ${e.toString()}");
+      rethrow;
+    }
+  }
 }

@@ -10,12 +10,15 @@ class ChatlistCubit extends Cubit<Result<List<ChatModel>>> {
   final SocketService _socketService;
   ChatlistCubit(this._chatListService, this._socketService) : super(Result(isLoading: true)) {
     getUserChatList();
-    // _socketService.emit(SocketEvents.joinChat.event, )
     _socketService.on(SocketEvents.newChat.event, (data){
       final chat = ChatModel.fromJson(data);
       emit(Result(data: [...state.data ?? [], chat]));
     });
     _socketService.on(SocketEvents.leaveChat.event, (data){
+      final chat = ChatModel.fromJson(data);
+      emit(Result(data: state.data?.where((e) => e.id != chat.id).toList()));
+    });
+    _socketService.on(SocketEvents.updateGroupName.event, (data){
       final chat = ChatModel.fromJson(data);
       emit(Result(data: state.data?.where((e) => e.id != chat.id).toList()));
     });

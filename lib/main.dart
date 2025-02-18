@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zelio_social/chat/cubit/group_chat_cubit.dart';
 import 'package:zelio_social/chat/service/chat_service.dart';
+import 'package:zelio_social/chat/service/get_avilable_user_service.dart';
+import 'package:zelio_social/chat/service/group_chat_service.dart';
 import 'package:zelio_social/chat/service/message_service.dart';
 import 'package:zelio_social/services/local_storage_service.dart';
 import 'package:zelio_social/services/socket_service.dart';
@@ -42,7 +45,9 @@ void main() async {
         RepositoryProvider(create: (context) => BookmarkService()),
         RepositoryProvider(create: (context) => ChatService()),
         RepositoryProvider(create: (context) => MessageService()),
-        RepositoryProvider(create: (context) => SocketService())
+        RepositoryProvider(create: (context) => SocketService()),
+        RepositoryProvider(create: (context) => GetAvilableUserService()),
+        RepositoryProvider(create: (context) => GroupChatService())
       ],
       child: MultiBlocListener(listeners: [
         BlocProvider(create: (context) => SignupCubit()),
